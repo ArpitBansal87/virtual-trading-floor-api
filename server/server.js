@@ -51,5 +51,5 @@ wsServer.on('connection', function(client) {
 
     client.send('Hello');
 })
-httpserver.listen(httpport);
+httpserver.listen(process.env.PORT || httpport);
 console.log(`Server is listening on Port: ${httpport}`);
