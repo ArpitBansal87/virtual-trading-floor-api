@@ -1,0 +1,28 @@
+{
+  "name": "virtual-trading-floor-api",
+  "version": "1.0.0",
+  "description": "Server for Virtual trading floor",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .\\server\\server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArpitBansal87/virtual-trading-floor-api.git"
+  },
+  "keywords": [
+    "virtual",
+    "trading",
+    "floor"
+  ],
+  "author": "Arpit Bansal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArpitBansal87/virtual-trading-floor-api/issues"
+  },
+  "homepage": "https://github.com/ArpitBansal87/virtual-trading-floor-api#readme",
+  "dependencies": {
+    "ws": "^7.3.1"
+  }
+}
