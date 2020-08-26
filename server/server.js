@@ -36,6 +36,8 @@ const httpserver = http.createServer((req, res) => {
     }
   } catch (err) {
     console.error(`ERROR =====>>>> ${err}`);
+    res.writeHead(500, RESPONSE_HEADERS.CORS_ENABLED);
+    res.end("Internal server error");
   }
 });
 
