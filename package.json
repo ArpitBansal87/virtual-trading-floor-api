@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node /app/server/server.js",
-    "start-local":"node .\\server\\server.js"
+    "start-local": "node .\\server\\server.js --cors"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/ArpitBansal87/virtual-trading-floor-api#readme",
   "dependencies": {
+    "concat-stream": "^2.0.0",
+    "firebase-admin": "^9.1.1",
     "ws": "^7.3.1"
   }
 }

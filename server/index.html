@@ -10,17 +10,6 @@
     <button class="my-btn">Send</button>
     <script>
       
-      const ws = new WebSocket("ws://localhost:8081");
-
-      ws.addEventListener("message", (msg) => {
-        console.log(msg);
-        console.log(msg.data);
-      });
-
-      document.querySelector('.my-btn').addEventListener('click', function() {
-        console.log('inside the function');
-        ws.send('test message');
-      })
     </script>
   </body>
 </html>
