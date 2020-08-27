@@ -11,6 +11,9 @@ const httpEndPoints = {
     },
     "/setPosition": function (req, res, db) {
       setPosition(req, res, db);
+    },    
+    "/logout": function (req, res, db) {
+      logout(req, res, db);
     },
   },
   GET: {
