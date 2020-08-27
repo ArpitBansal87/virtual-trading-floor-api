@@ -1,5 +1,5 @@
 const { login, signup, userList } = require("./authentication");
-const { getStocksList, setPosition } = require("./stocks");
+const { getStocksList, setPosition, getPortfolio } = require("./stocks");
 
 const httpEndPoints = {
   POST: {
@@ -17,6 +17,9 @@ const httpEndPoints = {
     "/userList": function (req, res, db) {
       userList(req, res, db);
     },
+    "/portfolio": function (req, res, db) {
+      getPortfolio(req, res, db)
+    }
   },
 };
 
@@ -24,6 +27,9 @@ const wsEndPoints = {
   "/stocks": function (req, res, db) {
     getStocksList(req, res, db);
   },
+  "/userList": function (req, res, db) {
+    userList(req, res, db);
+  }
 };
 
 module.exports = {

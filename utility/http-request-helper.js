@@ -1,3 +1,5 @@
+const url = require('url');
+
 async function streamToObject (stream) {
     const chunks = []
     return new Promise((resolve, reject) => {
@@ -7,4 +9,10 @@ async function streamToObject (stream) {
     })
 }
 
-module.exports = {getRequestBody: streamToObject};
+async function getParams(req) {
+  const queryObject = url.parse(req.url, true).query;
+
+  return queryObject;
+}
+
+module.exports = {getRequestBody: streamToObject, getParams};
