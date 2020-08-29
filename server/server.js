@@ -21,7 +21,7 @@ const httpserver = http.createServer((req, res) => {
       createReadStream(path.resolve("./server/index.html")).pipe(res);
     }
 
-    const urlObj = req.url.split('?');
+    const urlObj = req.url.split("?");
     const url = urlObj[0];
     const method = req.method;
     if (method in endPoints.httpRoutes) {
@@ -47,9 +47,10 @@ const wsServer = new WebSocket.Server({ server: httpserver });
 wsServer.on("connection", function (client, req) {
   console.log("New WS Connection");
 
-  const url = req.url;
+  const urlObj = req.url.split("?");
+  const url = urlObj[0];
   if (url in endPoints.wsRoutes) {
-    endPoints.wsRoutes[url](client, db);
+    endPoints.wsRoutes[url](client, db, req);
   }
 
   client.on("message", function (msg) {
@@ -109,7 +110,7 @@ setTimeout(() => {
             tradeDataList[stock]["price"] +
           (tradeDataList[stock]["buy"] / tradeDataList[stock]["totalShares"]) *
             tradeDataList[stock]["price"];
-            console.log(newPrice);
+        console.log(newPrice);
         let stockId = "";
         const stockRef = await db
           .collection("stocks")
@@ -127,8 +128,8 @@ setTimeout(() => {
             sharePrice: newPrice.toFixed(3).toString(),
           });
 
-          //changes for positions modification
-          let positionsStockIDs = [];
+        //changes for positions modification
+        let positionsStockIDs = [];
         const positionsRef = await db
           .collection("positions")
           .where("stockIdentifier", "==", stock)
@@ -138,16 +139,13 @@ setTimeout(() => {
             positionsStockIDs.push(element.id);
           });
         }
-        positionsStockIDs.forEach(symbolVal => {
-          db
-          .collection("positions")
-          .doc(symbolVal)
-          .update({
-            currentPrice: newPrice.toFixed(3).toString(),
-          });
-        })
-        
-          
+        positionsStockIDs.forEach((symbolVal) => {
+          db.collection("positions")
+            .doc(symbolVal)
+            .update({
+              currentPrice: newPrice.toFixed(3).toString(),
+            });
+        });
       }
     })
     .catch((err) => {
@@ -165,4 +163,4 @@ setTimeout(() => {
           .catch((err) => console.log(err));
       }
     });
-}, 1000);
+}, 10000);

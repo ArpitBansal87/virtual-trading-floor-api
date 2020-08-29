@@ -23,7 +23,7 @@ async function getStocksList(client, db) {
   );
 }
 
-async function getPortfolio(req, res, db) {
+async function getPortfolio(client, db, req) {
   console.log('inside the portfolio');
   let reqObj = await getParams(req);
   await db.collection('positions')
@@ -38,11 +38,9 @@ async function getPortfolio(req, res, db) {
       })
     }
     returnObj.response = responseObj
-    res.writeHead(200, RESPONSE_HEADERS.CORS_ENABLED);
-    res.end(JSON.stringify(returnObj));
+    client.send(JSON.stringify(returnObj))
   }).catch(error => {
-    res.writeHead(500, RESPONSE_HEADERS.CORS_ENABLED);
-    res.end(JSON.stringify({ response: [], error: 'Error in fetching response'}));
+    client.send(JSON.stringify({error: 'Error while fetching portfolio'}))
   })
 
 }
