@@ -1,4 +1,4 @@
-const { login, signup, userList } = require("./authentication");
+const { login, signup, userList, logout } = require("./authentication");
 const { getStocksList, setPosition, getPortfolio } = require("./stocks");
 
 const httpEndPoints = {
@@ -20,9 +20,6 @@ const httpEndPoints = {
     "/userList": function (req, res, db) {
       userList(req, res, db);
     },
-    "/portfolio": function (req, res, db) {
-      getPortfolio(req, res, db)
-    }
   },
 };
 
@@ -32,6 +29,9 @@ const wsEndPoints = {
   },
   "/userList": function (req, res, db) {
     userList(req, res, db);
+  },
+  "/portfolio": function (req, res, db) {
+    getPortfolio(req, res, db)
   }
 };
 
