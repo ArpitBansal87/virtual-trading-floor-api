@@ -28,8 +28,7 @@ async function getPortfolio(client, db, req) {
   let reqObj = await getParams(req);
   await db.collection('positions')
   .where("userIdentifier", "==", reqObj.userIdentifier)
-  .get()
-  .then(response => {
+  .onSnapshot(response => {
     let returnObj = { response: []};
     let responseObj = [];
     if(!response.empty) {      
@@ -39,8 +38,6 @@ async function getPortfolio(client, db, req) {
     }
     returnObj.response = responseObj
     client.send(JSON.stringify(returnObj))
-  }).catch(error => {
-    client.send(JSON.stringify({error: 'Error while fetching portfolio'}))
   })
 
 }
