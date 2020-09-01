@@ -1,5 +1,6 @@
 const { login, signup, userList, logout } = require("./authentication");
 const { getStocksList, setPosition, getPortfolio } = require("./stocks");
+const {getStockSnapshot} = require('./route-handlers/stocks');
 
 const httpEndPoints = {
   POST: {
@@ -20,6 +21,9 @@ const httpEndPoints = {
     "/userList": function (req, res, db) {
       userList(req, res, db);
     },
+    "/getTopStocks": function (req, res, db) {
+      getStockSnapshot(req, res, db);
+    }
   },
 };
 
