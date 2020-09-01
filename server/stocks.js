@@ -161,6 +161,10 @@ async function setPosition(req, res, db) {
           : Math.abs(Number.parseInt(getReqBody.quantity))
       ),
     });
+
+  await db.collection("users").doc(getReqBody.userIdentifier).update({
+    funds: getReqBody.funds,
+  });
 }
 
 module.exports = { getStocksList, setPosition, getPortfolio };
