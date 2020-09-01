@@ -3,42 +3,42 @@ const { RESPONSE_HEADERS } = require("./constants");
 const admin = require("firebase-admin");
 
 async function getStocksList(client, db) {
-  // const stockRef = await db.collection("stocks");
-  // stockRef.onSnapshot(
-  //   (querySnapshot) => {
-  //     let responseObj = [];
-  //     if (querySnapshot.empty) {
-  //       responseObj = [];
-  //     } else {
-  //       querySnapshot.forEach((element) => {
-  //         responseObj.push(element.data());
-  //       });
-  //     }
+  const stockRef = await db.collection("stocks");
+  stockRef.onSnapshot(
+    (querySnapshot) => {
+      let responseObj = [];
+      if (querySnapshot.empty) {
+        responseObj = [];
+      } else {
+        querySnapshot.forEach((element) => {
+          responseObj.push(element.data());
+        });
+      }
 
-  //     // client.send(JSON.stringify({ response: responseObj }));
-  //   },
-  //   (err) => {
-  //     console.log(`Encountered error: ${err}`);
-  //   }
-  // );
+      client.send(JSON.stringify({ response: responseObj }));
+    },
+    (err) => {
+      console.log(`Encountered error: ${err}`);
+    }
+  );
 }
 
 async function getPortfolio(client, db, req) {
   let reqObj = await getParams(req);
-  // await db
-  //   .collection("positions")
-  //   .where("userIdentifier", "==", reqObj.userIdentifier)
-  //   .onSnapshot((response) => {
-  //     let returnObj = { response: [] };
-  //     let responseObj = [];
-  //     if (!response.empty) {
-  //       response.forEach((stock) => {
-  //         responseObj.push(stock.data());
-  //       });
-  //     }
-  //     returnObj.response = responseObj;
-  //     // client.send(JSON.stringify(returnObj));
-  //   });
+  await db
+    .collection("positions")
+    .where("userIdentifier", "==", reqObj.userIdentifier)
+    .onSnapshot((response) => {
+      let returnObj = { response: [] };
+      let responseObj = [];
+      if (!response.empty) {
+        response.forEach((stock) => {
+          responseObj.push(stock.data());
+        });
+      }
+      returnObj.response = responseObj;
+      client.send(JSON.stringify(returnObj));
+    });
 }
 
 async function setPosition(req, res, db) {

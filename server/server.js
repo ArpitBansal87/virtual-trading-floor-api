@@ -61,8 +61,8 @@ httpserver.listen(process.env.PORT || httpport);
 console.log(`Server is listening on Port: ${httpport}`);
 
 // function to periodically change the price for shares.
-// setInterval(() => {
-setTimeout(() => {
+setInterval(() => {
+// setTimeout(() => {
   let tradeIDList = [];
   let totalSharesTraded = 0;
   let tradeDataList = {};
