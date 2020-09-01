@@ -13,7 +13,7 @@ async function logout(req, res, db) {
     })
     .then(() => {
       res.writeHead(200, RESPONSE_HEADERS.CORS_ENABLED);
-      res.end(JSON.stringify({wasLogoutSuccessfull: true}));
+      res.end(JSON.stringify({ wasLogoutSuccessfull: true }));
     });
 }
 
@@ -70,6 +70,7 @@ async function signup(req, res, db) {
 async function userList(client, db) {
   // res.writeHead(200, RESPONSE_HEADERS.CORS_ENABLED);
   const userRef = await db.collection("users");
+  const portfolioRef = await db.collection("positions");
   userRef.onSnapshot(
     (querySnapshot) => {
       let responseObj = [];
@@ -77,10 +78,25 @@ async function userList(client, db) {
         responseObj = [];
       } else {
         querySnapshot.forEach(async (element) => {
-          responseObj.push(element.data());
+          let userObj = { ...element.data(), id: element.id, portfolio: [] };
+          responseObj.push(userObj);
         });
       }
-      client.send(JSON.stringify({ response: responseObj }));
+      let portfolioList = {};
+      portfolioRef.onSnapshot(async (portfolioSnapShot) => {
+        portfolioSnapShot.forEach((portfolio) => {
+          const portfolioData = portfolio.data();
+          if (portfolioList[portfolioData.userIdentifier] !== undefined) {
+            portfolioList[portfolioData.userIdentifier].push(portfolioData);
+          } else {
+            portfolioList[portfolioData.userIdentifier] = [portfolioData];
+          }
+        });
+        responseObj.map((user) => {
+          user.portfolio = portfolioList[user.id];
+        });
+        client.send(JSON.stringify({ response: responseObj }));
+      });
     },
     (err) => {
       console.log(`Encountered error: ${err}`);
