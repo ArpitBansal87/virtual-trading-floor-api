@@ -24,22 +24,21 @@ async function getStocksList(client, db) {
 }
 
 async function getPortfolio(client, db, req) {
-  console.log('inside the portfolio');
   let reqObj = await getParams(req);
-  await db.collection('positions')
-  .where("userIdentifier", "==", reqObj.userIdentifier)
-  .onSnapshot(response => {
-    let returnObj = { response: []};
-    let responseObj = [];
-    if(!response.empty) {      
-      response.forEach(stock => {
-        responseObj.push(stock.data());
-      })
-    }
-    returnObj.response = responseObj
-    client.send(JSON.stringify(returnObj))
-  })
-
+  await db
+    .collection("positions")
+    .where("userIdentifier", "==", reqObj.userIdentifier)
+    .onSnapshot((response) => {
+      let returnObj = { response: [] };
+      let responseObj = [];
+      if (!response.empty) {
+        response.forEach((stock) => {
+          responseObj.push(stock.data());
+        });
+      }
+      returnObj.response = responseObj;
+      client.send(JSON.stringify(returnObj));
+    });
 }
 
 async function setPosition(req, res, db) {
@@ -47,7 +46,7 @@ async function setPosition(req, res, db) {
     return JSON.parse(data);
   });
 
-  //TODO: simplify the whole process
+  //TODO: Break the process based on snapshots used
   const positionSnapshot = await db
     .collection("positions")
     .where("userIdentifier", "==", getReqBody.userIdentifier)
@@ -114,7 +113,7 @@ async function setPosition(req, res, db) {
   } else {
     await db
       .collection("positions")
-      .doc(getReqBody.userIdentifier+'-'+getReqBody.stockSymbol)
+      .doc(getReqBody.userIdentifier + "-" + getReqBody.stockSymbol)
       .set({
         stockIdentifier: getReqBody.stockSymbol,
         tradeQuantity: Number.parseInt(getReqBody.quantity),
@@ -139,7 +138,7 @@ async function setPosition(req, res, db) {
     tradeType: getReqBody.tradeType,
     userIdentifier: getReqBody.userIdentifier,
     totalShares: getReqBody.totalShares,
-    price: getReqBody.buyPrice
+    price: getReqBody.buyPrice,
   });
 
   let stockId = "";
