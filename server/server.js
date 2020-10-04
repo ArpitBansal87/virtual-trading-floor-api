@@ -3,17 +3,25 @@ const path = require("path");
 const WebSocket = require("ws");
 const http = require("http");
 const { createReadStream } = require("fs");
+console.log(process.env.NODE_ENV);
 const admin = require("firebase-admin");
-const serviceAccount = require("../env/serviceAccountKey.json");
+let serviceAccount = {};
+if(process.env.NODE_ENV !== 'production'){
+  serviceAccount = require("../env/serviceAccountKey.json");
+}
 //initialize admin SDK using serciceAcountKey
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert({
+    "project_id": process.env.NODE_ENV !== 'production' ? serviceAccount.project_id : process.env.FIREBASE_PROJECT_ID,
+    "private_key": process.env.NODE_ENV !== 'production' ? serviceAccount.private_key : process.env.FIREBASE_PRIVATE_KEY ,
+    "client_email": process.env.NODE_ENV !== 'production' ? serviceAccount.client_email :process.env.FIREBASE_CLIENT_EMAIL,
+  }),
 });
 const db = admin.firestore();
 const httpport = 8081;
 const { RESPONSE_HEADERS } = require("./constants");
 
-const stocksConnectionList = {};
+let stocksConnectionList = [];
 
 const httpserver = http.createServer((req, res) => {
   try {
@@ -47,6 +55,10 @@ const wsServer = new WebSocket.Server({ server: httpserver });
 wsServer.on("connection", function (client, req) {
   console.log("New WS Connection");
 
+  stocksConnectionList.push(client);
+  const index = stocksConnectionList.length;
+  console.log(stocksConnectionList.length);
+
   const urlObj = req.url.split("?");
   const url = urlObj[0];
   if (url in endPoints.wsRoutes) {
@@ -56,6 +68,16 @@ wsServer.on("connection", function (client, req) {
   client.on("message", function (msg) {
     console.log(`msg: ${msg}`);
   });
+
+  client.on("close", function(msg) {
+    console.log(`Closed connection: ${msg} | Length of Connections: ${stocksConnectionList.length} | Index: ${index}`);
+    stocksConnectionList = stocksConnectionList.slice(index - 1 , 1);
+  });
+
+
+});
+wsServer.on("close", function(client, req) {
+  console.log("closing connection");
 });
 httpserver.listen(process.env.PORT || httpport);
 console.log(`Server is listening on Port: ${httpport}`);
