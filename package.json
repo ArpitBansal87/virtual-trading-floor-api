@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node /app/server/server.js",
-    "start-local": "node .\\server\\server.js --cors"
+    "start": "node /app/server/server.js NODE_ENV=production",
+    "start-local": "node .\\server\\server.js NODE_ENV=dev"
   },
   "repository": {
     "type": "git",

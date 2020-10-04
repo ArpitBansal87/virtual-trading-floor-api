@@ -88,6 +88,9 @@ dist
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
 
+# Misc
+env
+
 # vuepress build output
 .vuepress/dist
 
@@ -102,3 +105,4 @@ dist
 
 # TernJS port file
 .tern-port
+env/serviceAccountKey.json
