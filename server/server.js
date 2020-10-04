@@ -3,6 +3,9 @@ const path = require("path");
 const WebSocket = require("ws");
 const http = require("http");
 const { createReadStream } = require("fs");
+console.log(process.env.FIREBASE_PRIVATE_KEY);
+console.log(process.env.FIREBASE_PROJECT_ID);
+console.log(process.env.FIREBASE_CLIENT_EMAIL);
 console.log(process.env.NODE_ENV);
 const admin = require("firebase-admin");
 let serviceAccount = {};
@@ -14,7 +17,7 @@ admin.initializeApp({
   credential: admin.credential.cert({
     "project_id": process.env.NODE_ENV !== 'production' ? serviceAccount.project_id : process.env.FIREBASE_PROJECT_ID,
     "private_key": process.env.NODE_ENV !== 'production' ? serviceAccount.private_key : process.env.FIREBASE_PRIVATE_KEY ,
-    "client_email": process.env.NODE_ENV !== 'production' ? serviceAccount.client_email :process.env.FIREBASE_CLIENT_EMAIL,
+    "client_email": process.env.NODE_ENV !== 'production' ? serviceAccount.client_email : process.env.FIREBASE_CLIENT_EMAIL,
   }),
 });
 const db = admin.firestore();
